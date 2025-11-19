@@ -173,4 +173,94 @@ La auditoría del sistema de Mesa de Ayuda con IA se desarrollará en fases clar
 |------------|------------|-----------------------------|-----------------------------------|-----------------|------------------|
 | **Semana 3** | 13/02 – 14/02 | - Consolidación de hallazgos de todas las fases.<br>- Elaboración del informe final en formato Markdown.<br>- Organización de la carpeta `/evidencias`.<br>- Revisión final del informe y cierre de auditoría. | Lead: Ericka E. Martínez Yufra<br>Soporte: Equipo auditor | Informe final de auditoría<br>Carpeta de evidencias | README.md final<br>Carpeta `/evidencias` |
 
+# VIII. CRITERIOS DE AUDITORÍA
+
+Los criterios de auditoría constituyen el conjunto de lineamientos técnicos, buenas prácticas, requisitos funcionales y criterios de calidad que servirán como base para evaluar el funcionamiento del sistema de Mesa de Ayuda con IA de Corporate EPIS Pilot. Cada criterio define el estándar mínimo que debe cumplir el software para garantizar consistencia, precisión, operatividad técnica y fiabilidad en los procesos clave auditados.
+
+### Cuadro N.° 4 – Criterios de Auditoría por Objetivo Específico
+
+| **Objetivo Específico** | **Criterios de Auditoría** | **Referencia Técnica / Buenas Prácticas** |
+|-------------------------|-----------------------------|-------------------------------------------|
+| **1. Verificar la correcta implementación del router de intenciones.** | - El modelo LLM debe clasificar de forma consistente las intenciones “pregunta_general”, “reporte_problema” y “despedida”.<br>- El parser JSON debe interpretar correctamente el resultado del modelo sin errores ni valores vacíos.<br>- El prompt del router debe ser claro, determinista y evitar ambigüedades.<br>- El flujo de decisión debe ejecutar la cadena correcta según la intención.<br>- Debe existir consistencia entre pruebas repetidas con la misma entrada. | Buenas prácticas de diseño de prompts (Prompt Engineering).<br>Validación funcional de modelos LLM.<br>Buenas prácticas de manejo de errores en parsers JSON. |
+| **2. Evaluar el funcionamiento del pipeline RAG (ingesta, embeddings, vector store y recuperación).** | - El proceso de ingesta debe cargar correctamente los documentos en el vector store sin errores.<br>- Los embeddings generados deben ser consistentes y almacenarse de forma persistente en `vector_store/`.<br>- Las respuestas deben provenir de la base de conocimiento, confirmando que el RAG funciona.<br>- Las recuperaciones deben ser relevantes y coherentes con las consultas del usuario.<br>- La estructura del vector store debe mantenerse íntegra y accesible. | Buenas prácticas de RAG y gestión de embeddings.<br>Calidad de datos y chunking adecuado.<br>Gestión técnica de ChromaDB como vector store persistente. |
+| **3. Comprobar la integridad y operatividad del proceso de creación de tickets.** | - El mensaje `ACTION_CREATE_TICKET` debe ser detectado correctamente por el backend.<br>- La inserción en SQLite debe registrar todos los campos requeridos (id, descripción, estado).<br>- No deben generarse tickets duplicados o incompletos.<br>- El archivo `tickets.db` debe mantenerse íntegro y sin corrupción.<br>- La respuesta del backend debe confirmar el registro exitoso al frontend. | Buenas prácticas de persistencia local con SQLite.<br>Principios de integridad ACID.<br>Buenas prácticas de endpoints REST en sistemas de soporte técnico. |
+| **4. Analizar la estructura técnica del despliegue (Docker, Nginx, comunicación con Ollama).** | - Los contenedores deben construirse correctamente sin dependencias rotas.<br>- `docker compose up` debe desplegar backend, frontend y proxy sin fallas.<br>- El backend debe comunicarse correctamente con Ollama mediante el puerto configurado.<br>- Nginx debe enrutar correctamente las solicitudes al frontend y backend.<br>- El sistema completo debe poder ejecutarse localmente sin conexión a internet. | Buenas prácticas de Docker y microservicios.<br>Patrones de despliegue local para sistemas IA.<br>Buenas prácticas de configuración de Nginx para proxys reversos. |
+
+# IX. INFORMACIÓN ADMINISTRATIVA
+
+La auditoría será realizada íntegramente por la auditora designada, quien ejecutará todas las fases del proceso: planificación, revisión documental, análisis técnico, validación operativa y elaboración del informe final. Se garantiza la confidencialidad de toda la información del sistema auditado, el resguardo adecuado de los archivos revisados y el uso exclusivo de la evidencia recopilada para fines académicos y de control técnico.  
+Se empleará un enfoque basado en evidencia, asegurando que todos los hallazgos se fundamenten en pruebas verificables obtenidas durante la ejecución de la auditoría del sistema de Mesa de Ayuda con IA.
+
+---
+
+## IX.1. Comisión Auditora
+
+Debido a la naturaleza académica del examen y al alcance definido, la auditoría será ejecutada únicamente por **una auditora responsable**, quien asumirá todos los roles: planificación, pruebas técnicas, validación, redacción de hallazgos y elaboración del informe final.
+
+### Cuadro N.° 5 – Comisión Auditora
+
+| **Cargo** | **Nombres y Apellidos** | **Profesión / Especialidad** | **Planificación (días)** | **Ejecución (días)** | **Informe (días)** | **Total (días)** |
+|-----------|--------------------------|-------------------------------|---------------------------|------------------------|----------------------|--------------------|
+| Auditora Responsable (Líder de Auditoría) | **Martínez Yufra, Ericka Esther** | Ingeniera de Sistemas / Auditoría de Sistemas e IA | 3 | 8 | 3 | **14** |
+
+### Justificación técnica
+- La auditoría forma parte del Examen de la Unidad III, por lo que la ejecución es individual.  
+- La auditora asume las funciones de planificación, revisión documental, análisis técnico del sistema (backend, frontend, RAG, Ollama, SQLite), verificación de despliegue en Docker y consolidación del informe.  
+- El total de días se ajusta al cronograma definido en el punto VII.  
+- No se requiere un equipo ampliado ya que el alcance está centrado exclusivamente en un único sistema y su código fuente.
+
+---
+
+## IX.2. Costos Directos Estimados
+
+Dado que la auditoría es académica y realizada únicamente por una auditora, no existen costos institucionales reales; sin embargo, para efectos metodológicos se presenta una estimación de horas hombre y asignaciones, siguiendo el formato requerido por el esquema oficial de auditoría.
+
+### Cuadro N.° 6 – Costo de horas hombre y asignaciones
+
+| **Miembro (Cargo)** | **Días (Total)** | **Tarifa diaria (S/.)** | **Costo H/H (S/.) = Días × Tarifa** | **Asignación (S/.)** | **Subtotal (S/.)** | **Pasajes / Viáticos (S/.)** | **Costo Total (S/.)** |
+|----------------------|-------------------|---------------------------|--------------------------------------|------------------------|----------------------|-------------------------------|-------------------------|
+| Auditora Responsable — **Martínez Yufra, Ericka Esther** | **14** | 300 | **4,200** | 400 | **4,600** | 200 | **4,800** |
+
+### Observaciones
+- Los valores son referenciales, únicamente para cumplir el formato del informe de auditoría.  
+- No existe contratación real ni erogación presupuestaria.  
+- Las asignaciones incluyen materiales menores, energía, conectividad y herramientas de pruebas utilizadas durante la auditoría.  
+- Los viáticos son simbólicos, pues la ejecución se realiza de manera local.
+
+---
+
+# X. DOCUMENTO A EMITIR
+
+Durante la auditoría del Sistema de Mesa de Ayuda con IA de Corporate EPIS Pilot se emitirán dos documentos oficiales: el **Plan de Auditoría** y el **Informe Final de Auditoría**, ambos elaborados siguiendo el formato requerido en el Examen de la Unidad III – Auditoría de Sistemas.
+
+### 1. **Plan de Auditoría del Sistema de Mesa de Ayuda con IA**
+- Define el propósito, alcance, objetivos, criterios, procedimientos, cronograma y responsabilidades.  
+- Sirve como guía metodológica para la ejecución de la auditoría.  
+- Elaborado por: **Ericka E. Martínez Yufra** (Líder de Auditoría).  
+- Aprobación académica: Docente responsable del curso.  
+- Emitido en la **Fase 1 – Planificación**.
+
+### 2. **Informe Final de Auditoría del Sistema de Mesa de Ayuda con IA**
+- Consolida los resultados, hallazgos, evidencia recopilada y conclusiones.  
+- Incluye recomendaciones de mejora para fortalecer la arquitectura, el flujo de soporte y la calidad del sistema.  
+- Elaborado por: **Ericka E. Martínez Yufra**.  
+- Emitido en la **Fase 5 – Informe y Cierre**.
+
+### Control documental
+Ambos documentos deben:
+- Ser identificados adecuadamente.  
+- Conservar versiones actualizadas.  
+- Mantenerse almacenados en el repositorio del proyecto (`README.md` + `/evidencias`).  
+- Mantener trazabilidad de hallazgos y evidencias.  
+
+### Lugar y fecha de suscripción
+Tacna, 14 de febrero de 2025
+
+---
+
+### Firmas
+**Martínez Yufra, Ericka Esther**  
+Auditora Responsable – Líder de Auditoría
+
+
 
