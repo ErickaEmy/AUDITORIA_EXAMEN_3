@@ -1,4 +1,8 @@
+
 # I. ORIGEN
+La auditoría se realiza sobre el repositorio oficial proporcionado para el examen:
+
+🔗 **Repositorio auditado:** https://github.com/ErickaEmy/AUDITORIA_EXAMEN_3
 
 El presente **Informe de Auditoría de Sistemas** se origina en la ejecución del *Examen de la Unidad III – Auditoría de Sistemas*, cuyo objetivo es evaluar exhaustivamente el **código fuente**, el **funcionamiento operativo**, la **arquitectura técnica**, los **controles implementados** y el **despliegue del sistema de Mesa de Ayuda con IA** perteneciente a **Corporate EPIS Pilot**.
 
