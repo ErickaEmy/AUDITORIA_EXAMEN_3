@@ -1,51 +1,198 @@
-# Corporate EPIS Pilot
+I. ORIGEN
 
-Asistente de IA conversacional para entornos empresariales, creado para responder dudas de los usuarios con base en una fuente de conocimiento interna y guiar al usuario a través de un flujo de solución de problemas antes de crear tickets de soporte técnico.
+El presente Informe de Auditoría de Sistemas tiene su origen en la ejecución del Examen de la Unidad III – Auditoría de Sistemas, cuyo objetivo es evaluar la conformidad, el funcionamiento, el código fuente, la arquitectura técnica y los controles implementados en el sistema Mesa de Ayuda con IA desarrollado por Corporate EPIS Pilot.
 
----
+La necesidad de esta auditoría surge de:
 
-## Características Principales
+La obligación académica de aplicar un proceso formal de auditoría sobre un sistema real que incorpora arquitectura RAG (Retrieval-Augmented Generation), un router de intenciones mediante LLM, un flujo conversacional guiado, generación de tickets con SQLite, y despliegue mediante Docker y Kubernetes.
 
-- **Arquitectura RAG (Retrieval-Augmented Generation):** El bot basa su conocimiento en un conjunto de documentos privados (PDFs, TXTs) para garantizar respuestas precisas y reducir alucinaciones.
-- **Router de Intenciones:** Un LLM clasifica la intención del usuario (`pregunta general`, `reporte de problema`, `despedida`) para dirigir la conversación de forma inteligente.
-- **Flujo de Conversación Guiado:** En lugar de crear un ticket directamente, el bot primero ofrece una solución de la base de conocimiento. Luego, pregunta explícitamente al usuario si el problema se ha solucionado, implementando un **bucle de feedback** efectivo.
-- **Creación de Tickets por Acción:** Si la solución no es suficiente, el frontend ofrece al usuario la opción de crear un ticket. Esta decisión se comunica al backend mediante un mensaje de acción especial (`ACTION_CREATE_TICKET`), demostrando un patrón de diseño robusto para agentes de IA.
-- **Pila Tecnológica Local y Open-Source:** El sistema funciona 100% localmente usando Ollama con Llama 3.1 y modelos de embeddings de alto rendimiento, sin depender de APIs de pago.
-- **Listo para Despliegue (Docker y Kubernetes):** El proyecto está completamente "dockerizado" y cuenta con manifiestos de Kubernetes para su orquestación, demostrando un flujo de trabajo listo para producción.
-- **CI/CD Automatizado:** Un workflow de GitHub Actions se encarga de construir y publicar automáticamente las imágenes de Docker en Docker Hub cada vez que se actualiza el código.
+La verificación del cumplimiento del diseño declarado por el equipo desarrollador, comparando la implementación real (código, contenedores y comportamiento del sistema) frente al diseño previsto.
 
----
+La revisión exhaustiva del código backend (FastAPI), código frontend (React + MUI), scripts de ingesta, construcción automática de embeddings, vector store (ChromaDB), y del funcionamiento del modelo LLM ejecutado mediante Ollama.
 
-## Arquitectura del Sistema
+La necesidad de asegurar la integridad del flujo de creación de tickets, seguimiento de entradas de usuario, manejo de errores, validaciones, seguridad, y consistencia del ciclo de vida conversacional.
 
-La arquitectura consiste en un frontend que gestiona el estado de la conversación y un backend stateless que responde a cada pregunta a través de un único endpoint. La lógica de decisión reside en el router de LangChain.
+La solicitud del docente para que el estudiante:
 
-```mermaid
-graph TD
-    A[Usuario] --> B{Frontend React MUI};
-    B --> C{Ingress Kubernetes};
-    C -- ruta / --> B;
-    C -- ruta /api/ask --> D{Backend FastAPI};
-    D --> E[Router LangChain];
-    E -- Intencion: pregunta_general --> F[RAG Chain];
-    E -- Intencion: reporte_de_problema --> F;
-    E -- Intencion: despedida --> G[Respuesta Directa];
-    F --> H[(Vector Store - ChromaDB)];
-    D -- ACTION_CREATE_TICKET --> I[Funcion de Tickets];
-    I --> J[(DB - SQLite)];
-    H --> K[Documentos PDF TXT];
-``` 
+Clone el sistema.
 
-## Stack Tecnológico
+Levante localmente el servicio con Docker.
 
-| Área | Tecnologías |
-|------|--------------|
-| **Backend** | Python, FastAPI, LangChain, Ollama (Llama 3.1), Uvicorn |
-| **IA & NLP** | RAG, Hugging Face Embeddings (`multilingual-e5-large`), ChromaDB |
-| **Frontend** | React, TypeScript, Material-UI (MUI), Vite |
-| **Base de Datos** | SQLite |
-| **DevOps** | Docker, Docker Compose, Kubernetes, NGINX Ingress, GitHub Actions |
+Ejecute pruebas técnicas y funcionales.
 
-Al acceder a la interfaz http://localhost:5173 debe interactuar hasta  Registra el Ticket en la Base de Datos, el cual debe ser vericable.
+Documente evidencias.
 
-Nota. Para este examen deberán usar smollm:360m en lugar de Llama 3.1
+Elabore el Informe de Auditoría utilizando estructura oficial.
+
+Este Informe constituye el documento formal que consolida todos los resultados obtenidos en el proceso de auditoría ejecutado.
+
+II. INFORMACIÓN DE LA ENTIDAD O DEPENDENCIA
+
+Corporate EPIS Pilot es una unidad de desarrollo experimental enfocada en soluciones empresariales basadas en Inteligencia Artificial, soporte técnico automatizado y sistemas conversacionales avanzados. Desarrolla prototipos listos para producción y herramientas prácticas para gestión empresarial.
+
+Información relevante de la entidad
+
+Nombre del sistema auditado:
+Asistente de IA – Mesa de Ayuda Corporativa EPIS Pilot.
+
+Finalidad del sistema:
+Proporcionar soporte técnico inteligente a los usuarios, utilizando IA para clasificar consultas, buscar información interna y crear tickets de soporte cuando es necesario.
+
+Naturaleza del sistema:
+Sistema modular distribuido compuesto por:
+
+Backend FastAPI con pipeline RAG.
+
+Frontend React/MUI con manejo dinámico del estado conversacional.
+
+Base local vectorial (ChromaDB).
+
+Motor de IA local Ollama (sin dependencias cloud).
+
+SQLite para registro de tickets.
+
+Contenedores Docker con imagenes generadas automáticamente.
+
+Manifiestos Kubernetes para despliegue escalable.
+
+Equipo responsable del desarrollo:
+Corporate EPIS Pilot – División de Ingeniería y Automatización.
+
+Ubicación del código fuente:
+Repositorio GitHub entregado para el examen.
+
+Características técnicas confirmadas (según código auditado)
+
+Backend ubicado en /backend:
+
+main.py contiene:
+
+Router de intenciones mediante LLM.
+
+Endpoint /ask.
+
+Cadena RAG (RetrievalQA).
+
+Clasificación de intención (pregunta_general, reporte_de_problema, despedida).
+
+Creación real de tickets con SQLite.
+
+Scripts críticos:
+
+ingest.py: creación automática de vector_store.
+
+database_setup.py: creación de tabla tickets.
+
+Dockerfile que genera embeddings dentro de la imagen.
+
+Frontend en /frontend:
+
+Chat completo con:
+
+Bucle de feedback.
+
+Botones condicionales.
+
+Integración del mensaje ACTION_CREATE_TICKET.
+
+Flujo de recopilación de detalles del usuario.
+
+Orquestación:
+
+docker-compose.yml con backend + frontend + proxy.
+
+Nginx como reverse proxy (puerto 5173 → 80).
+
+Esta información constituye la línea base para los procedimientos de auditoría desarrollados más adelante.
+
+III. DENOMINACIÓN DE LA MATERIA DE CONTROL
+
+La materia de control objeto de la auditoría es:
+
+“Auditoría de Sistemas de Código Fuente y Funcionamiento Operativo del Sistema de Mesa de Ayuda con IA – Corporate EPIS Pilot”
+
+El ámbito de control incluye, con carácter obligatorio y verificable:
+
+1. Control del código fuente (backend y frontend)
+
+Validación de correctitud del código Python (FastAPI).
+
+Validación del código React/MUI e interacción con el backend.
+
+Revisión de scripts auxiliares (ingest.py, database_setup.py).
+
+Verificación de modelos y librerías especificadas en requirements.txt.
+
+2. Control de arquitectura RAG implementada
+
+Generación, persistencia y consistencia de la base vector_store/.
+
+Proceso de segmentación, embeddings y carga al vector store.
+
+Funcionamiento de la cadena de recuperación (RetrievalQA).
+
+Integridad y disponibilidad del repositorio de conocimiento (PDF/TXT).
+
+3. Control del router de intenciones
+
+Validación del funcionamiento del LLM llama3.1:8b o smollm:360m.
+
+Verificación del prompt del router.
+
+Pruebas de clasificación en las intenciones declaradas.
+
+Manejo de mensajes ambiguos o sin JSON.
+
+4. Control del flujo de conversación
+
+Validación del bucle de feedback:
+
+“¿Esta información soluciona tu problema?”
+
+Botones (sí/no).
+
+Acciones siguientes (abrir ticket / explicar más).
+
+Confirmación de envío de acciones ACTION_CREATE_TICKET.
+
+5. Control de creación de tickets
+
+Revisión del INSERT en SQLite.
+
+Verificación de persistencia del archivo tickets.db.
+
+Validación del flujo:
+
+Solicitud de descripción → creación de ticket → respuesta del bot.
+
+6. Control de despliegue
+
+Verificación de Dockerfiles del frontend y backend.
+
+Funcionamiento correcto bajo docker compose.
+
+Validación de comunicación backend ↔ Ollama.
+
+Verificación del reverse proxy Nginx.
+
+7. Control de seguridad técnica
+
+Validación de exposición de puertos.
+
+Manejo de CORS.
+
+Uso de extra_hosts y contexto Docker.
+
+Revisión de logs estructurados (loguru).
+
+Evaluación básica de manejo de excepciones.
+
+8. Control de funcionamiento interno
+
+Verificación del endpoint /ask.
+
+Pruebas de recuperación RAG.
+
+Pruebas de error.
+
+Logs de prometheus_fastapi_instrumentator
